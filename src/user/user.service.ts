@@ -38,7 +38,7 @@ export class UserService {
       password,
       version: 1,
       createdAt: Date.now(),
-      updatedAt: undefined,
+      updatedAt: Date.now(),
     };
 
     this.users.push(newUser);
