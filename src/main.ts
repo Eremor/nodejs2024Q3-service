@@ -1,21 +1,24 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
+import { AppModule } from './app.module';
 
 dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe())
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Home Library Service')
     .setDescription('Home music library service')
     .setVersion('1.0.0')
-    .build()
+    .build();
 
-  const documentFactory = () => SwaggerModule.createDocument(app, swaggerConfig)
-  SwaggerModule.setup('api', app, documentFactory)
+  const documentFactory = () =>
+    SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, documentFactory);
 
   const port = process.env.PORT || 4000;
   await app.listen(port);
