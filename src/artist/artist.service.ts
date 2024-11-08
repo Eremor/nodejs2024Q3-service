@@ -33,20 +33,14 @@ export class ArtistService {
     return newArtist;
   }
 
-  updateArtist(id: string, updateArtistDto: UpdateArtistDto): Artist {
-    const { name, grammy } = updateArtistDto;
+  updateArtist(id: string, updateArtistDto: CreateArtistDto): Artist {
     validateId(id);
     const artist = this.artists.find((artist) => artist.id === id);
     if (!artist) {
       throw new NotFoundException('Artist not found');
     }
-    if (name) {
-      artist.name = name;
-    }
-
-    if (grammy) {
-      artist.grammy = grammy;
-    }
+    artist.name = updateArtistDto.name;
+    artist.grammy = updateArtistDto.grammy;
 
     return artist;
   }
