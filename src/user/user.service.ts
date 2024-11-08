@@ -1,13 +1,13 @@
 import {
-  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { validate, v4 as uuidV4 } from 'uuid';
+import { v4 as uuidV4 } from 'uuid';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDTO } from './dto/update-password.dto';
 import { User, UserWithoutPassword } from './interfaces/user.interface';
+import { validateId } from '../utils';
 
 @Injectable()
 export class UserService {
@@ -18,7 +18,7 @@ export class UserService {
   }
 
   getUserById(id: string): User {
-    this.validateId(id);
+    validateId(id);
     const user = this.users.find((user) => user.id === id);
     if (!user) {
       throw new NotFoundException('User not found');
@@ -50,14 +50,14 @@ export class UserService {
 
   updateUserPassword(id: string, updateUserDto: UpdatePasswordDTO): User {
     const { oldPassword, newPassword } = updateUserDto;
-    this.validateId(id);
+    validateId(id);
     const user = this.users.find((user) => user.id === id);
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
     if (user.password !== oldPassword) {
-      throw new ForbiddenException('Old password is wrong')
+      throw new ForbiddenException('Old password is wrong');
     }
 
     user.password = newPassword;
@@ -65,22 +65,16 @@ export class UserService {
     user.updatedAt = Date.now();
     return {
       ...user,
-      password: undefined
-    }
+      password: undefined,
+    };
   }
 
   deleteUser(id: string): void {
-    this.validateId(id);
-    const index = this.users.findIndex((user) => user.id === id)
+    validateId(id);
+    const index = this.users.findIndex((user) => user.id === id);
     if (index === -1) {
-      throw new NotFoundException('User not found')
+      throw new NotFoundException('User not found');
     }
-    this.users.splice(index, 1)
-  }
-
-  private validateId(id: string): void {
-    if (!validate(id)) {
-      throw new BadRequestException('not UUID');
-    }
+    this.users.splice(index, 1);
   }
 }

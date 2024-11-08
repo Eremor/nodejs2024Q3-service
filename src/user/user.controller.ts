@@ -20,7 +20,7 @@ export class UserController {
 
   @Post()
   @ApiBody({
-    type: [CreateUserDto]
+    type: [CreateUserDto],
   })
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
