@@ -3,10 +3,13 @@ import { v4 as uuidV4 } from 'uuid';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { Album } from './interfaces/album.interface';
 import { validateId } from '../utils';
+import { TrackService } from 'src/track/track.service';
 
 @Injectable()
 export class AlbumService {
   private albums: Album[] = [];
+
+  constructor(private readonly trackService: TrackService) {}
 
   getAll(): Album[] {
     return this.albums;
@@ -50,6 +53,17 @@ export class AlbumService {
     if (index === -1) {
       throw new NotFoundException('Album not found');
     }
+
+    this.trackService.nullifyAlbumReferences(id);
+
     this.albums.splice(index, 1);
+  }
+
+  nullifyArtistReferences(artistId: string) {
+    this.albums.forEach((album) => {
+      if (album.artistId === artistId) {
+        album.artistId = null;
+      }
+    });
   }
 }

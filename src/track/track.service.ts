@@ -54,4 +54,20 @@ export class TrackService {
 
     this.tracks.splice(index, 1);
   }
+
+  nullifyAlbumReferences(albumId: string) {
+    this.tracks.forEach((track) => {
+      if (track.albumId === albumId) {
+        track.albumId = null;
+      }
+    });
+  }
+
+  nullifyArtistReferences(artistId: string) {
+    this.tracks.forEach((track) => {
+      if (track.artistId === artistId) {
+        track.artistId = null;
+      }
+    });
+  }
 }
