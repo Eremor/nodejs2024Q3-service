@@ -20,12 +20,12 @@ export class ArtistController {
   @Post()
   @ApiOperation({
     summary: 'Add new artist',
-    description: 'Add new artist information'
+    description: 'Add new artist information',
   })
   @ApiResponse({
     status: 201,
     description: 'Successful operation',
-    type: Artist
+    type: Artist,
   })
   @ApiBody({
     schema: {
@@ -33,18 +33,18 @@ export class ArtistController {
       properties: {
         name: {
           type: 'string',
-          example: 'Freddie Mercury'
+          example: 'Freddie Mercury',
         },
         grammy: {
           type: 'boolean',
-          example: false
-        }
-      }
-    }
+          example: false,
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. body does not contain required fields'
+    description: 'Bad request. body does not contain required fields',
   })
   create(@Body() createArtistDto: CreateArtistDto) {
     return this.artistService.createArtist(createArtistDto);
@@ -53,12 +53,12 @@ export class ArtistController {
   @Get()
   @ApiOperation({
     summary: 'Get all artists',
-    description: 'Get all library artists list'
+    description: 'Get all library artists list',
   })
   @ApiResponse({
     status: 200,
     description: 'Successful operation',
-    type: [Artist]
+    type: [Artist],
   })
   findAll() {
     return this.artistService.getAllArtists();
@@ -67,20 +67,20 @@ export class ArtistController {
   @Get(':id')
   @ApiOperation({
     summary: 'Get artist by id',
-    description: 'Get single artist by id'
+    description: 'Get single artist by id',
   })
   @ApiResponse({
     status: 200,
     description: 'Successful operation',
-    type: Artist
+    type: Artist,
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. userId is invalid (not uuid)'
+    description: 'Bad request. artistId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 404,
-    description: 'Artist not found'
+    description: 'Artist not found',
   })
   findOne(@Param('id') id: string) {
     return this.artistService.getArtistById(id);
@@ -89,17 +89,17 @@ export class ArtistController {
   @Put(':id')
   @ApiOperation({
     summary: 'Update artist',
-    description: 'Update artist information by ID'
+    description: 'Update artist information by ID',
   })
   @ApiResponse({
     status: 200,
     description: 'Successful operation',
     type: Artist,
     example: {
-      id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       name: 'Freddie Mercury',
-      grammy: true
-    }
+      grammy: true,
+    },
   })
   @ApiBody({
     schema: {
@@ -107,22 +107,22 @@ export class ArtistController {
       properties: {
         name: {
           type: 'string',
-          example: 'Freddie Mercury'
+          example: 'Freddie Mercury',
         },
         grammy: {
           type: 'boolean',
-          example: true
-        }
-      }
-    }
+          example: true,
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. userId is invalid (not uuid)'
+    description: 'Bad request. artistId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 404,
-    description: 'Artist not found'
+    description: 'Artist not found',
   })
   update(@Param('id') id: string, @Body() updateArtistDto: CreateArtistDto) {
     return this.artistService.updateArtist(id, updateArtistDto);
@@ -132,7 +132,7 @@ export class ArtistController {
   @HttpCode(204)
   @ApiOperation({
     summary: 'Delete artist',
-    description: 'Delete artist by ID.'
+    description: 'Delete artist by ID.',
   })
   @ApiResponse({
     status: 204,
@@ -140,11 +140,11 @@ export class ArtistController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. artistId is invalid (not uuid)'
+    description: 'Bad request. artistId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 404,
-    description: 'Artist not found'
+    description: 'Artist not found',
   })
   remove(@Param('id') id: string) {
     return this.artistService.deleteArtist(id);

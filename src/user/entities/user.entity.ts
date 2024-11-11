@@ -1,15 +1,15 @@
-import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 export class User {
   @ApiProperty({
     type: 'string',
-    format: 'uuid'
+    format: 'uuid',
   })
   id: string;
 
   @ApiProperty({
     type: 'string',
-    example: 'TestUser'
+    example: 'TestUser',
   })
   login: string;
 
@@ -18,19 +18,19 @@ export class User {
 
   @ApiProperty({
     type: 'number',
-    example: 1
+    example: 1,
   })
   version: number;
 
   @ApiProperty({
     type: 'number',
-    example: 1655000000
+    example: 1655000000,
   })
   createdAt: number;
 
   @ApiProperty({
     type: 'number',
-    example: 1655000000
+    example: 1655000000,
   })
   updatedAt: number;
 }

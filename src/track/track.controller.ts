@@ -20,12 +20,12 @@ export class TrackController {
   @Post()
   @ApiOperation({
     summary: 'Add new track',
-    description: 'Add new track information'
+    description: 'Add new track information',
   })
   @ApiResponse({
     status: 201,
     description: 'Successful operation',
-    type: Track
+    type: Track,
   })
   @ApiBody({
     schema: {
@@ -33,26 +33,26 @@ export class TrackController {
       properties: {
         name: {
           type: 'string',
-          example: 'The Show Must Go On'
+          example: 'The Show Must Go On',
         },
         duration: {
           type: 'number',
-          example: 262
+          example: 262,
         },
         artistId: {
           type: 'string',
-          format: 'uuid'
+          format: 'uuid',
         },
         albumId: {
           type: 'string',
-          format: 'uuid'
-        }
-      }
-    }
+          format: 'uuid',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. body does not contain required fields'
+    description: 'Bad request. body does not contain required fields',
   })
   create(@Body() createTrackDto: CreateTrackDto) {
     return this.trackService.create(createTrackDto);
@@ -61,12 +61,12 @@ export class TrackController {
   @Get()
   @ApiOperation({
     summary: 'Get all tracks',
-    description: 'Get all library tracks list'
+    description: 'Get all library tracks list',
   })
   @ApiResponse({
     status: 200,
     description: 'Successful operation',
-    type: [Track]
+    type: [Track],
   })
   findAll() {
     return this.trackService.getAll();
@@ -75,20 +75,20 @@ export class TrackController {
   @Get(':id')
   @ApiOperation({
     summary: 'Get track by id',
-    description: 'Get single track by id'
+    description: 'Get single track by id',
   })
   @ApiResponse({
     status: 200,
     description: 'Successful operation',
-    type: Track
+    type: Track,
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. userId is invalid (not uuid)'
+    description: 'Bad request. trackId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 404,
-    description: 'Track not found'
+    description: 'Track not found',
   })
   findOne(@Param('id') id: string) {
     return this.trackService.getOneById(id);
@@ -97,19 +97,19 @@ export class TrackController {
   @Put(':id')
   @ApiOperation({
     summary: 'Update track',
-    description: 'Update library track information by ID'
+    description: 'Update library track information by ID',
   })
   @ApiResponse({
     status: 200,
     description: 'The track has been updated.',
     type: Track,
     example: {
-      id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       name: 'Bohemian Rhapsody',
       duration: 355,
-      artistId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      albumId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-    }
+      artistId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      albumId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+    },
   })
   @ApiBody({
     schema: {
@@ -117,30 +117,30 @@ export class TrackController {
       properties: {
         name: {
           type: 'string',
-          example: 'Bohemian Rhapsody'
+          example: 'Bohemian Rhapsody',
         },
         duration: {
           type: 'number',
-          example: 355
+          example: 355,
         },
         artistId: {
           type: 'string',
-          format: 'uuid'
+          format: 'uuid',
         },
         albumId: {
           type: 'string',
-          format: 'uuid'
-        }
-      }
-    }
+          format: 'uuid',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. userId is invalid (not uuid)'
+    description: 'Bad request. trackId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 404,
-    description: 'Track not found'
+    description: 'Track not found',
   })
   update(@Param('id') id: string, @Body() updateTrackDto: CreateTrackDto) {
     return this.trackService.update(id, updateTrackDto);
@@ -150,7 +150,7 @@ export class TrackController {
   @HttpCode(204)
   @ApiOperation({
     summary: 'Delete track',
-    description: 'Delete track by ID.'
+    description: 'Delete track by ID.',
   })
   @ApiResponse({
     status: 204,
@@ -158,11 +158,11 @@ export class TrackController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. trackId is invalid (not uuid)'
+    description: 'Bad request. trackId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 404,
-    description: 'Track not found'
+    description: 'Track not found',
   })
   remove(@Param('id') id: string) {
     return this.trackService.remove(id);

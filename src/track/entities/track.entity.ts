@@ -1,36 +1,36 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class Track {
   @ApiProperty({
     type: 'string',
-    format: 'uuid'
+    format: 'uuid',
   })
   id: string;
 
   @ApiProperty({
     type: 'string',
-    example: 'The Show Must Go On'
+    example: 'The Show Must Go On',
   })
   name: string;
 
   @ApiProperty({
     type: 'string',
     format: 'uuid',
-    nullable: true
+    nullable: true,
   })
   artistId: string | null;
 
   @ApiProperty({
     type: 'string',
     format: 'uuid',
-    nullable: true
+    nullable: true,
   })
   albumId: string | null;
 
   @ApiProperty({
     type: 'number',
     example: 262,
-    description: 'In seconds'
+    description: 'In seconds',
   })
   duration: number;
 }

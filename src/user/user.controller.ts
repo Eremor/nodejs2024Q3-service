@@ -22,25 +22,25 @@ export class UserController {
   @Post()
   @ApiOperation({
     summary: 'Create user',
-    description: 'Create a new user'
+    description: 'Create a new user',
   })
   @ApiResponse({
     status: 201,
     description: 'The user has been created.',
-    type: User
+    type: User,
   })
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
         username: { type: 'string' },
-        password: { type: 'string' }
-      }
-    }
+        password: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. body does not contain required fields'
+    description: 'Bad request. body does not contain required fields',
   })
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
@@ -49,12 +49,12 @@ export class UserController {
   @Get()
   @ApiOperation({
     summary: 'Get all users',
-    description: 'Get all users'
+    description: 'Get all users',
   })
   @ApiResponse({
     status: 200,
     description: 'Successful operation',
-    type: [User]
+    type: [User],
   })
   findAll() {
     return this.userService.getAllUsers();
@@ -63,20 +63,20 @@ export class UserController {
   @Get(':id')
   @ApiOperation({
     summary: 'Get user by id',
-    description: 'Get single user by id'
+    description: 'Get single user by id',
   })
   @ApiResponse({
     status: 200,
     description: 'Successful operation',
-    type: User
+    type: User,
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. userId is invalid (not uuid)'
+    description: 'Bad request. userId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found'
+    description: 'User not found',
   })
   findOne(@Param('id') id: string) {
     return this.userService.getUserById(id);
@@ -85,33 +85,33 @@ export class UserController {
   @Put(':id')
   @ApiOperation({
     summary: `Update a user's password`,
-    description: `Update a user's password by ID`
+    description: `Update a user's password by ID`,
   })
   @ApiResponse({
     status: 200,
     description: 'The user has been updated.',
-    type: User
+    type: User,
   })
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
         oldPassword: { type: 'string' },
-        newPassword: { type: 'string' }
-      }
-    }
+        newPassword: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. userId is invalid (not uuid)'
+    description: 'Bad request. userId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 403,
-    description: 'oldPassword is wrong'
+    description: 'oldPassword is wrong',
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found'
+    description: 'User not found',
   })
   update(@Param('id') id: string, @Body() updateUserDto: UpdatePasswordDTO) {
     return this.userService.updateUserPassword(id, updateUserDto);
@@ -121,7 +121,7 @@ export class UserController {
   @HttpCode(204)
   @ApiOperation({
     summary: 'Delete user',
-    description: 'Delete user by ID.'
+    description: 'Delete user by ID.',
   })
   @ApiResponse({
     status: 204,
@@ -129,11 +129,11 @@ export class UserController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. userId is invalid (not uuid)'
+    description: 'Bad request. userId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found'
+    description: 'User not found',
   })
   remove(@Param('id') id: string) {
     return this.userService.deleteUser(id);

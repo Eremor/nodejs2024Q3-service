@@ -1,21 +1,21 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class Artist {
   @ApiProperty({
     type: 'string',
-    format: 'uuid'
+    format: 'uuid',
   })
   id: string;
 
   @ApiProperty({
     type: 'string',
-    example: 'Freddie Mercury'
+    example: 'Freddie Mercury',
   })
   name: string;
 
   @ApiProperty({
     type: 'boolean',
-    example: false
+    example: false,
   })
   grammy: boolean;
 }

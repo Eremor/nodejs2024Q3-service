@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { v4 as uuidV4 } from 'uuid';
 import { CreateTrackDto } from './dto/create-track.dto';
-import { Track } from './interfaces/track.interface';
+import { Track } from './entities/track.entity';
 import { validateId } from '../utils';
 import { TrackDeletedEvent } from './events/track-deleted.event';
 

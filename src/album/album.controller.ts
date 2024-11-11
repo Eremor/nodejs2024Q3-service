@@ -20,12 +20,12 @@ export class AlbumController {
   @Post()
   @ApiOperation({
     summary: 'Add new album',
-    description: 'Add new album information'
+    description: 'Add new album information',
   })
   @ApiResponse({
     status: 201,
     description: 'Successful operation',
-    type: Album
+    type: Album,
   })
   @ApiBody({
     schema: {
@@ -33,22 +33,22 @@ export class AlbumController {
       properties: {
         name: {
           type: 'string',
-          example: 'Innuendo'
+          example: 'Innuendo',
         },
         year: {
           type: 'number',
-          example: 1991
+          example: 1991,
         },
         artistId: {
           type: 'string',
-          format: 'uuid'
-        }
-      }
-    }
+          format: 'uuid',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. body does not contain required fields'
+    description: 'Bad request. body does not contain required fields',
   })
   create(@Body() createAlbumDto: CreateAlbumDto) {
     return this.albumService.create(createAlbumDto);
@@ -57,12 +57,12 @@ export class AlbumController {
   @Get()
   @ApiOperation({
     summary: 'Get all albums',
-    description: 'Get all library albums list'
+    description: 'Get all library albums list',
   })
   @ApiResponse({
     status: 200,
     description: 'Successful operation',
-    type: [Album]
+    type: [Album],
   })
   findAll() {
     return this.albumService.getAll();
@@ -71,20 +71,20 @@ export class AlbumController {
   @Get(':id')
   @ApiOperation({
     summary: 'Get album by id',
-    description: 'Get single album by id'
+    description: 'Get single album by id',
   })
   @ApiResponse({
     status: 200,
     description: 'Successful operation',
-    type: Album
+    type: Album,
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. userId is invalid (not uuid)'
+    description: 'Bad request. albumId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 404,
-    description: 'Album not found'
+    description: 'Album not found',
   })
   findOne(@Param('id') id: string) {
     return this.albumService.getOneById(id);
@@ -93,18 +93,18 @@ export class AlbumController {
   @Put(':id')
   @ApiOperation({
     summary: 'Update album',
-    description: 'Update library album information by ID'
+    description: 'Update library album information by ID',
   })
   @ApiResponse({
     status: 200,
     description: 'The album has been updated.',
     type: Album,
     example: {
-      id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       name: 'A Night at the Opera',
       year: 1975,
-      artistId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-    }
+      artistId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+    },
   })
   @ApiBody({
     schema: {
@@ -112,26 +112,26 @@ export class AlbumController {
       properties: {
         name: {
           type: 'string',
-          example: 'A Night at the Opera'
+          example: 'A Night at the Opera',
         },
         year: {
           type: 'number',
-          example: 1975
+          example: 1975,
         },
         artistId: {
           type: 'string',
-          format: 'uuid'
+          format: 'uuid',
         },
-      }
-    }
+      },
+    },
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. userId is invalid (not uuid)'
+    description: 'Bad request. albumId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 404,
-    description: 'Album not found'
+    description: 'Album not found',
   })
   update(@Param('id') id: string, @Body() updateAlbumDto: CreateAlbumDto) {
     return this.albumService.update(id, updateAlbumDto);
@@ -141,7 +141,7 @@ export class AlbumController {
   @HttpCode(204)
   @ApiOperation({
     summary: 'Delete album',
-    description: 'Delete album by ID.'
+    description: 'Delete album by ID.',
   })
   @ApiResponse({
     status: 204,
@@ -149,11 +149,11 @@ export class AlbumController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. albumId is invalid (not uuid)'
+    description: 'Bad request. albumId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 404,
-    description: 'Album not found'
+    description: 'Album not found',
   })
   remove(@Param('id') id: string) {
     return this.albumService.remove(id);
