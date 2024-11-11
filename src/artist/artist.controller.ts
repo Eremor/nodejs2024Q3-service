@@ -140,7 +140,7 @@ export class ArtistController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. userId is invalid (not uuid)'
+    description: 'Bad request. artistId is invalid (not uuid)'
   })
   @ApiResponse({
     status: 404,

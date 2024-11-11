@@ -149,7 +149,7 @@ export class AlbumController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Bad request. userId is invalid (not uuid)'
+    description: 'Bad request. albumId is invalid (not uuid)'
   })
   @ApiResponse({
     status: 404,
