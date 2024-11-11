@@ -29,7 +29,7 @@ export class Track {
 
   @ApiProperty({
     type: 'number',
-    example: '262',
+    example: 262,
     description: 'In seconds'
   })
   duration: number;
