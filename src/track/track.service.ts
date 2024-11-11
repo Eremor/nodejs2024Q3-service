@@ -1,12 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { v4 as uuidV4 } from 'uuid';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { Track } from './interfaces/track.interface';
 import { validateId } from '../utils';
+import { TrackDeletedEvent } from './events/track-deleted.event';
 
 @Injectable()
 export class TrackService {
   private tracks: Track[] = [];
+
+  constructor(private readonly eventEmitter: EventEmitter2) {}
 
   getAll(): Track[] {
     return this.tracks;
@@ -51,6 +55,8 @@ export class TrackService {
     if (index === -1) {
       throw new NotFoundException('Track not found');
     }
+
+    this.eventEmitter.emit('track.deleted', new TrackDeletedEvent(id));
 
     this.tracks.splice(index, 1);
   }

@@ -1,15 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { v4 as uuidV4 } from 'uuid';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { Album } from './interfaces/album.interface';
 import { validateId } from '../utils';
 import { TrackService } from 'src/track/track.service';
+import { AlbumDeletedEvent } from './events/album-deleted.event';
 
 @Injectable()
 export class AlbumService {
   private albums: Album[] = [];
 
-  constructor(private readonly trackService: TrackService) {}
+  constructor(
+    private readonly trackService: TrackService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   getAll(): Album[] {
     return this.albums;
@@ -55,6 +60,7 @@ export class AlbumService {
     }
 
     this.trackService.nullifyAlbumReferences(id);
+    this.eventEmitter.emit('album.deleted', new AlbumDeletedEvent(id));
 
     this.albums.splice(index, 1);
   }

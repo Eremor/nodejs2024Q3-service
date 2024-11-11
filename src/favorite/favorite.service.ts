@@ -8,6 +8,10 @@ import { ArtistService } from 'src/artist/artist.service';
 import { AlbumService } from 'src/album/album.service';
 import { TrackService } from 'src/track/track.service';
 import { validateId } from 'src/utils';
+import { OnEvent } from '@nestjs/event-emitter';
+import { ArtistDeletedEvent } from 'src/artist/events/artist-deleted.event';
+import { AlbumDeletedEvent } from 'src/album/events/album-deleted.event';
+import { TrackDeletedEvent } from 'src/track/events/track-deleted.event';
 
 @Injectable()
 export class FavoriteService {
@@ -54,6 +58,13 @@ export class FavoriteService {
     this.favorites.artists.splice(index, 1);
   }
 
+  @OnEvent('artist.deleted')
+  handleArtistDeleted(event: ArtistDeletedEvent) {
+    this.favorites.artists = this.favorites.artists.filter(
+      (artist) => artist.id !== event.artistId,
+    );
+  }
+
   addAlbumToFavorites(albumId: string): string | void {
     validateId(albumId);
     try {
@@ -81,6 +92,13 @@ export class FavoriteService {
     this.favorites.albums.splice(index, 1);
   }
 
+  @OnEvent('album.deleted')
+  handleAlbumDeleted(event: AlbumDeletedEvent) {
+    this.favorites.albums = this.favorites.albums.filter(
+      (album) => album.id !== event.albumId,
+    );
+  }
+
   addTrackToFavorites(trackId: string): string | void {
     validateId(trackId);
     try {
@@ -106,5 +124,12 @@ export class FavoriteService {
     }
 
     this.favorites.tracks.splice(index, 1);
+  }
+
+  @OnEvent('track.deleted')
+  handleTrackDeleted(event: TrackDeletedEvent) {
+    this.favorites.tracks = this.favorites.tracks.filter(
+      (track) => track.id !== event.trackId,
+    );
   }
 }

@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { v4 as uuidV4 } from 'uuid';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { Artist } from './interfaces/artist.interface';
 import { validateId } from '../utils';
 import { TrackService } from 'src/track/track.service';
 import { AlbumService } from 'src/album/album.service';
+import { ArtistDeletedEvent } from './events/artist-deleted.event';
 
 @Injectable()
 export class ArtistService {
@@ -13,6 +15,7 @@ export class ArtistService {
   constructor(
     private readonly trackServices: TrackService,
     private readonly albumServices: AlbumService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   getAllArtists(): Artist[] {
@@ -60,6 +63,8 @@ export class ArtistService {
 
     this.trackServices.nullifyArtistReferences(id);
     this.albumServices.nullifyArtistReferences(id);
+
+    this.eventEmitter.emit('artist.deleted', new ArtistDeletedEvent(id));
 
     this.artists.splice(index, 1);
   }
