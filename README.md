@@ -8,7 +8,7 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/Eremor/nodejs2024Q3-service.git
 ```
 
 ## Installing NPM modules
@@ -16,6 +16,7 @@ git clone {repository URL}
 ```
 npm install
 ```
+Rename file `.env.example` to `.env`
 
 ## Running application
 
@@ -24,7 +25,7 @@ npm start
 ```
 
 After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
+in your browser OpenAPI documentation by typing **http://localhost:4000/doc/**
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 ## Testing
