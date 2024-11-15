@@ -1,9 +1,11 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
+RUN npm cache clean --force
 RUN npm ci --only=production --force
 COPY . .
 RUN npm install --save-dev @nestjs/cli --force
+RUN npx prisma generate
 RUN npm run build
 
 FROM node:22-alpine
