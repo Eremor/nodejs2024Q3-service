@@ -142,7 +142,10 @@ export class TrackController {
     status: 404,
     description: 'Track not found',
   })
-  async update(@Param('id') id: string, @Body() updateTrackDto: CreateTrackDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateTrackDto: CreateTrackDto,
+  ) {
     return this.trackService.update(id, updateTrackDto);
   }
 

@@ -113,7 +113,10 @@ export class UserController {
     status: 404,
     description: 'User not found',
   })
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdatePasswordDTO) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdatePasswordDTO,
+  ) {
     return this.userService.updateUserPassword(id, updateUserDto);
   }
 

@@ -124,7 +124,10 @@ export class ArtistController {
     status: 404,
     description: 'Artist not found',
   })
-  async update(@Param('id') id: string, @Body() updateArtistDto: CreateArtistDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateArtistDto: CreateArtistDto,
+  ) {
     return this.artistService.updateArtist(id, updateArtistDto);
   }
 

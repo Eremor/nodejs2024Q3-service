@@ -8,10 +8,9 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TrackService {
-
   constructor(
     private readonly eventEmitter: EventEmitter2,
-    private readonly prismaService: PrismaService
+    private readonly prismaService: PrismaService,
   ) {}
 
   async getAll(): Promise<Track[]> {
@@ -21,8 +20,8 @@ export class TrackService {
   async getOneById(id: string): Promise<Track> {
     validateId(id);
     const track = await this.prismaService.track.findUnique({
-      where: { id }
-    })
+      where: { id },
+    });
     if (!track) {
       throw new NotFoundException('Track not found');
     }
@@ -32,25 +31,25 @@ export class TrackService {
   async create(createTrackDto: CreateTrackDto): Promise<Track> {
     const newTrack = await this.prismaService.track.create({
       data: {
-        ...createTrackDto
-      }
-    })
+        ...createTrackDto,
+      },
+    });
     return newTrack;
   }
 
   async update(id: string, updateTrackDto: CreateTrackDto): Promise<Track> {
     validateId(id);
     const track = this.prismaService.track.findUnique({
-      where: { id }
-    })
+      where: { id },
+    });
     if (!track) {
       throw new NotFoundException('Track not found');
     }
 
     const updatedTrack = await this.prismaService.track.update({
       where: { id },
-      data: updateTrackDto
-    })
+      data: updateTrackDto,
+    });
 
     return updatedTrack;
   }
@@ -58,8 +57,8 @@ export class TrackService {
   async remove(id: string) {
     validateId(id);
     const track = this.prismaService.track.findUnique({
-      where: { id }
-    })
+      where: { id },
+    });
     if (!track) {
       throw new NotFoundException('Track not found');
     }
@@ -67,25 +66,25 @@ export class TrackService {
     this.eventEmitter.emit('track.deleted', new TrackDeletedEvent(id));
 
     await this.prismaService.track.delete({
-      where: { id }
-    })
+      where: { id },
+    });
   }
 
   async nullifyAlbumReferences(albumId: string): Promise<void> {
     await this.prismaService.track.updateMany({
       where: { albumId },
       data: {
-        albumId: null
-      }
-    })
+        albumId: null,
+      },
+    });
   }
 
   async nullifyArtistReferences(artistId: string): Promise<void> {
     await this.prismaService.track.updateMany({
       where: { artistId },
       data: {
-        artistId: null
-      }
-    })
+        artistId: null,
+      },
+    });
   }
 }

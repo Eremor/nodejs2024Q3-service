@@ -133,7 +133,10 @@ export class AlbumController {
     status: 404,
     description: 'Album not found',
   })
-  async update(@Param('id') id: string, @Body() updateAlbumDto: CreateAlbumDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateAlbumDto: CreateAlbumDto,
+  ) {
     return this.albumService.update(id, updateAlbumDto);
   }
 

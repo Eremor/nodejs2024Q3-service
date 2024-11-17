@@ -11,9 +11,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly prismaService: PrismaService
-  ){}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async getAllUsers(): Promise<UserWithoutPassword[]> {
     const users = await this.prismaService.user.findMany();
@@ -23,15 +21,15 @@ export class UserService {
   async getUserById(id: string): Promise<UserWithoutPassword> {
     validateId(id);
     const user = await this.prismaService.user.findUnique({
-      where: { id }
-    })
+      where: { id },
+    });
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
     const { password, ...userWithoutPassword } = user;
 
-    return userWithoutPassword
+    return userWithoutPassword;
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<UserWithoutPassword> {
@@ -43,21 +41,24 @@ export class UserService {
         password,
         version: 1,
         createdAt: Date.now(),
-        updatedAt: Date.now()
-      }
-    })
+        updatedAt: Date.now(),
+      },
+    });
 
     const { password: _, ...userWithoutPassword } = newUser;
 
-    return userWithoutPassword
+    return userWithoutPassword;
   }
 
-  async updateUserPassword(id: string, updateUserDto: UpdatePasswordDTO): Promise<UserWithoutPassword> {
+  async updateUserPassword(
+    id: string,
+    updateUserDto: UpdatePasswordDTO,
+  ): Promise<UserWithoutPassword> {
     const { oldPassword, newPassword } = updateUserDto;
     validateId(id);
     const user = await this.prismaService.user.findUnique({
-      where: { id }
-    })
+      where: { id },
+    });
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -72,26 +73,26 @@ export class UserService {
       data: {
         password: newPassword,
         version: user.version + 1,
-        updatedAt: Date.now()
-      }
-    })
+        updatedAt: Date.now(),
+      },
+    });
 
     const { password: _, ...userWithoutPassword } = updatedUser;
 
-    return userWithoutPassword
+    return userWithoutPassword;
   }
 
   async deleteUser(id: string): Promise<void> {
     validateId(id);
     const user = await this.prismaService.user.findUnique({
-      where: { id }
-    })
-  
+      where: { id },
+    });
+
     if (!user) {
       throw new NotFoundException('User not found');
     }
     await this.prismaService.user.delete({
-      where: { id }
-    })
+      where: { id },
+    });
   }
 }

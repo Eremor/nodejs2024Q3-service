@@ -9,7 +9,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AlbumService {
-
   constructor(
     private readonly prismaService: PrismaService,
     private readonly trackService: TrackService,
@@ -23,8 +22,8 @@ export class AlbumService {
   async getOneById(id: string): Promise<Album> {
     validateId(id);
     const album = await this.prismaService.album.findUnique({
-      where: { id }
-    })
+      where: { id },
+    });
     if (!album) {
       throw new NotFoundException('Album not found');
     }
@@ -33,24 +32,24 @@ export class AlbumService {
 
   async create(createAlbumDto: CreateAlbumDto): Promise<Album> {
     const newAlbum = await this.prismaService.album.create({
-      data: createAlbumDto
-    })
+      data: createAlbumDto,
+    });
     return newAlbum;
   }
 
   async update(id: string, updateAlbumDto: CreateAlbumDto): Promise<Album> {
     validateId(id);
     const album = await this.prismaService.album.findUnique({
-      where: { id }
-    })
+      where: { id },
+    });
     if (!album) {
       throw new NotFoundException('Album not found');
     }
 
     const updatedAlbum = await this.prismaService.album.update({
       where: { id },
-      data: updateAlbumDto
-    })
+      data: updateAlbumDto,
+    });
 
     return updatedAlbum;
   }
@@ -58,8 +57,8 @@ export class AlbumService {
   async remove(id: string): Promise<void> {
     validateId(id);
     const album = await this.prismaService.album.findUnique({
-      where: { id }
-    })
+      where: { id },
+    });
     if (!album) {
       throw new NotFoundException('Album not found');
     }
@@ -68,16 +67,16 @@ export class AlbumService {
     this.eventEmitter.emit('album.deleted', new AlbumDeletedEvent(id));
 
     await this.prismaService.album.delete({
-      where: { id }
-    })
+      where: { id },
+    });
   }
 
   async nullifyArtistReferences(artistId: string): Promise<void> {
     await this.prismaService.album.updateMany({
       where: { artistId },
       data: {
-        artistId: null
-      }
-    })
+        artistId: null,
+      },
+    });
   }
 }
