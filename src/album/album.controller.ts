@@ -50,7 +50,7 @@ export class AlbumController {
     status: 400,
     description: 'Bad request. body does not contain required fields',
   })
-  create(@Body() createAlbumDto: CreateAlbumDto) {
+  async create(@Body() createAlbumDto: CreateAlbumDto) {
     return this.albumService.create(createAlbumDto);
   }
 
@@ -64,7 +64,7 @@ export class AlbumController {
     description: 'Successful operation',
     type: [Album],
   })
-  findAll() {
+  async findAll() {
     return this.albumService.getAll();
   }
 
@@ -86,7 +86,7 @@ export class AlbumController {
     status: 404,
     description: 'Album not found',
   })
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.albumService.getOneById(id);
   }
 
@@ -133,7 +133,7 @@ export class AlbumController {
     status: 404,
     description: 'Album not found',
   })
-  update(@Param('id') id: string, @Body() updateAlbumDto: CreateAlbumDto) {
+  async update(@Param('id') id: string, @Body() updateAlbumDto: CreateAlbumDto) {
     return this.albumService.update(id, updateAlbumDto);
   }
 
@@ -155,7 +155,7 @@ export class AlbumController {
     status: 404,
     description: 'Album not found',
   })
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.albumService.remove(id);
   }
 }
