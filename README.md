@@ -10,18 +10,24 @@
 ```
 git clone https://github.com/Eremor/nodejs2024Q3-service.git
 ```
+```
+git checkout feature-week-2
+```
 
 ## Installing NPM modules
 
 ```
-npm install
+npm install --force
 ```
 Rename file `.env.example` to `.env`
 
 ## Running application
 
 ```
-npm start
+docker-compose up --build
+```
+```
+docker exec -it nodejs2024q3_app_container npx prisma migrate dev --name init
 ```
 
 After starting the app on port (4000 as default) you can open
