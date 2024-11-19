@@ -2,7 +2,7 @@ FROM node:22-alpine
 WORKDIR /app
 COPY package*.json ./
 COPY ./prisma /app/prisma
-RUN npm install
+RUN npm install && npm cache clean --force
 RUN npx prisma generate
 COPY . .
 RUN npm run build

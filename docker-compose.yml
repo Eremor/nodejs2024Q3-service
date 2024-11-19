@@ -4,15 +4,11 @@ networks:
 
 services:
   database:
-    # image: postgres:latest
     container_name: hl_db
-    # environment:
-    #   POSTGRES_DB: "${POSTGRES_DB}"
-    #   POSTGRES_USER: "${POSTGRES_USER}"
-    #   POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    image: eremor/hl_db
     build:
-      context: .
       dockerfile: Dockerfile.db
+      context: .
     env_file:
       - .env
     volumes:
@@ -25,13 +21,11 @@ services:
     restart: always
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
     container_name: hl_app
-    # environment:
-    #   DATABASE_URL: "${DATABASE_URL}"
-    #   PORT: "${PORT}"
+    image: eremor/hl_app
+    build:
+      dockerfile: Dockerfile
+      context: .
     volumes:
       - .:/app
       - /app/node_modules
