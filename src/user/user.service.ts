@@ -15,7 +15,11 @@ export class UserService {
 
   async getAllUsers(): Promise<UserWithoutPassword[]> {
     const users = await this.prismaService.user.findMany();
-    return users.map(({ password, ...user }) => user);
+    return users.map(({ password, ...user }) => ({
+      ...user,
+      createdAt: Number(user.createdAt.getTime()),
+      updatedAt: Number(user.updatedAt.getTime())
+    }));
   }
 
   async getUserById(id: string): Promise<UserWithoutPassword> {
@@ -29,25 +33,25 @@ export class UserService {
 
     const { password, ...userWithoutPassword } = user;
 
-    return userWithoutPassword;
+    return {
+      ...userWithoutPassword,
+      createdAt: Number(userWithoutPassword.createdAt.getTime()),
+      updatedAt: Number(userWithoutPassword.updatedAt.getTime())
+    };
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<UserWithoutPassword> {
-    const { login, password } = createUserDto;
-
     const newUser = await this.prismaService.user.create({
-      data: {
-        login,
-        password,
-        version: 1,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-      },
+      data: createUserDto,
     });
 
-    const { password: _, ...userWithoutPassword } = newUser;
+    const { password, ...userWithoutPassword } = newUser;
 
-    return userWithoutPassword;
+    return {
+      ...userWithoutPassword,
+      createdAt: Number(userWithoutPassword.createdAt.getTime()),
+      updatedAt: Number(userWithoutPassword.updatedAt.getTime())
+    };
   }
 
   async updateUserPassword(
@@ -73,13 +77,16 @@ export class UserService {
       data: {
         password: newPassword,
         version: user.version + 1,
-        updatedAt: Date.now(),
       },
     });
 
-    const { password: _, ...userWithoutPassword } = updatedUser;
+    const { password, ...userWithoutPassword } = updatedUser;
 
-    return userWithoutPassword;
+    return {
+      ...userWithoutPassword,
+      createdAt: Number(userWithoutPassword.createdAt.getTime()),
+      updatedAt: Number(userWithoutPassword.updatedAt.getTime())
+    };
   }
 
   async deleteUser(id: string): Promise<void> {

@@ -38,36 +38,29 @@ export class TrackService {
   }
 
   async update(id: string, updateTrackDto: CreateTrackDto): Promise<Track> {
-    validateId(id);
-    const track = this.prismaService.track.findUnique({
-      where: { id },
-    });
-    if (!track) {
-      throw new NotFoundException('Track not found');
+    const track = await this.getOneById(id)
+
+    if (track) {
+      const updatedTrack = await this.prismaService.track.update({
+        where: { id },
+        data: updateTrackDto,
+      });
+  
+      return updatedTrack;
     }
-
-    const updatedTrack = await this.prismaService.track.update({
-      where: { id },
-      data: updateTrackDto,
-    });
-
-    return updatedTrack;
   }
 
   async remove(id: string) {
-    validateId(id);
-    const track = this.prismaService.track.findUnique({
-      where: { id },
-    });
-    if (!track) {
-      throw new NotFoundException('Track not found');
+    const track = await this.getOneById(id)
+
+    if (track) {
+      this.eventEmitter.emit('track.deleted', new TrackDeletedEvent(id));
+  
+      await this.prismaService.track.delete({
+        where: { id },
+      });
     }
 
-    this.eventEmitter.emit('track.deleted', new TrackDeletedEvent(id));
-
-    await this.prismaService.track.delete({
-      where: { id },
-    });
   }
 
   async nullifyAlbumReferences(albumId: string): Promise<void> {

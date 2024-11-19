@@ -16,8 +16,7 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .build();
 
-  const documentFactory = () =>
-    SwaggerModule.createDocument(app, swaggerConfig);
+  const documentFactory = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('doc', app, documentFactory);
 
   const port = process.env.PORT || 4000;

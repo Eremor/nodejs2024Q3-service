@@ -103,13 +103,6 @@ export class TrackController {
     status: 200,
     description: 'The track has been updated.',
     type: Track,
-    example: {
-      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      name: 'Bohemian Rhapsody',
-      duration: 355,
-      artistId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      albumId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    },
   })
   @ApiBody({
     schema: {

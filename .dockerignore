@@ -1,6 +1,4 @@
 node_modules
-src
-test
 .git
 Dockerfile
 docker-compose.yml
@@ -10,3 +8,5 @@ README.md
 coverage
 .vscode
 .DS_Store
+.eslint*
+.prettier*

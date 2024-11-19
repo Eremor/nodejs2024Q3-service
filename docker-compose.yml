@@ -4,12 +4,17 @@ networks:
 
 services:
   database:
-    image: postgres:latest
-    container_name: nodejs2024q3_postgres_container
-    environment:
-      POSTGRES_DB: "${POSTGRES_DB}"
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    # image: postgres:latest
+    container_name: hl_db
+    # environment:
+    #   POSTGRES_DB: "${POSTGRES_DB}"
+    #   POSTGRES_USER: "${POSTGRES_USER}"
+    #   POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    env_file:
+      - .env
     volumes:
       - db_data:/var/lib/postgresql/data
       - db_logs:/var/log/postgresql
@@ -20,12 +25,13 @@ services:
     restart: always
 
   app:
-    build: .
-    container_name: nodejs2024q3_app_container
-    environment:
-      DATABASE_URL: "${DATABASE_URL}"
-      NODE_ENV: development
-      PORT: "${PORT}"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hl_app
+    # environment:
+    #   DATABASE_URL: "${DATABASE_URL}"
+    #   PORT: "${PORT}"
     volumes:
       - .:/app
       - /app/node_modules
