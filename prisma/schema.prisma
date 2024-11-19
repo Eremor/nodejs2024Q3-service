@@ -26,7 +26,7 @@ model Artist {
   albums Album[]
   tracks Track[]
 
-  favorites Favorite[] @relation("FavoriteArtists")
+  favoriteArtist FavoriteArtist?
 
   @@map("artists")
 }
@@ -38,7 +38,7 @@ model Album {
 
   artistId String?
   artist Artist? @relation(fields: [artistId], references: [id])
-  favorites Favorite[] @relation("FavoriteAlbums")
+  favoriteAlbum FavoriteAlbum?
 
   tracks Track[]
 
@@ -54,16 +54,25 @@ model Track {
 
   artist Artist? @relation(fields: [artistId], references: [id])
   album Album? @relation(fields: [albumId], references: [id])
-  favorites Favorite[] @relation("FavoriteTracks")
+  favoriteTrack FavoriteTrack?
 
   @@map("tracks")
 }
 
-model Favorite {
+model FavoriteTrack {
   id String @id @default(uuid())
-  artists Artist[] @relation("FavoriteArtists")
-  albums Album[] @relation("FavoriteAlbums")
-  tracks Track[] @relation("FavoriteTracks")
+  track Track @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  trackId String @unique
+}
 
-  @@map("favorites")
+model FavoriteAlbum {
+  id String @id @default(uuid())
+  album Album @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  albumId String @unique
+}
+
+model FavoriteArtist {
+  id String @id @default(uuid())
+  artist Artist @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  artistId String @unique
 }

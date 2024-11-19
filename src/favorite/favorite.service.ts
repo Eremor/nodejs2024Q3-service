@@ -24,13 +24,29 @@ export class FavoriteService {
   ) {}
 
   async getAll(): Promise<Favorite> {
-    return await this.prismaService.favorite.findFirst({
+    const tracks = await this.prismaService.favoriteTrack.findMany({
       include: {
-        artists: true,
-        albums: true,
-        tracks: true,
-      },
-    });
+        track: true
+      }
+    })
+
+    const albums = await this.prismaService.favoriteAlbum.findMany({
+      include: {
+        album: true
+      }
+    })
+
+    const artists = await this.prismaService.favoriteArtist.findMany({
+      include: {
+        artist: true
+      }
+    })
+
+    return {
+      tracks: tracks.map((favTrack) => favTrack.track),
+      albums: albums.map((favAlbum) => favAlbum.album),
+      artists: artists.map((favArtist) => favArtist.artist)
+    }
   }
 
   async addArtistToFavorites(artistId: string): Promise<string | void> {
@@ -40,18 +56,11 @@ export class FavoriteService {
       const favorite = await this.getAll();
 
       if (!favorite.artists.includes(artist)) {
-        await this.prismaService.favorite.update({
-          where: {
-            id: favorite.id,
-          },
+        await this.prismaService.favoriteArtist.create({
           data: {
-            artists: {
-              connect: {
-                id: artistId,
-              },
-            },
-          },
-        });
+            artistId
+          }
+        })
         return `Artist with id: ${artistId} added to favorites`;
       }
     } catch {
@@ -70,18 +79,11 @@ export class FavoriteService {
       throw new NotFoundException('Artist is not in favorites');
     }
 
-    await this.prismaService.favorite.update({
+    await this.prismaService.favoriteArtist.delete({
       where: {
-        id: favorite.id,
-      },
-      data: {
-        artists: {
-          disconnect: {
-            id: artistId,
-          },
-        },
-      },
-    });
+        artistId
+      }
+    })
   }
 
   @OnEvent('artist.deleted')
@@ -96,18 +98,11 @@ export class FavoriteService {
       const favorite = await this.getAll();
 
       if (!favorite.albums.includes(album)) {
-        await this.prismaService.favorite.update({
-          where: {
-            id: favorite.id,
-          },
+        await this.prismaService.favoriteAlbum.create({
           data: {
-            albums: {
-              connect: {
-                id: albumId,
-              },
-            },
-          },
-        });
+            albumId
+          }
+        })
         return `Album with id: ${albumId} added to favorites`;
       }
     } catch {
@@ -124,18 +119,11 @@ export class FavoriteService {
       throw new NotFoundException('Album is not in favorites');
     }
 
-    await this.prismaService.favorite.update({
+    await this.prismaService.favoriteAlbum.delete({
       where: {
-        id: favorite.id,
-      },
-      data: {
-        albums: {
-          disconnect: {
-            id: albumId,
-          },
-        },
-      },
-    });
+        albumId
+      }
+    })
   }
 
   @OnEvent('album.deleted')
@@ -150,18 +138,11 @@ export class FavoriteService {
       const favorite = await this.getAll();
 
       if (!favorite.tracks.includes(track)) {
-        await this.prismaService.favorite.update({
-          where: {
-            id: favorite.id,
-          },
+        await this.prismaService.favoriteTrack.create({
           data: {
-            tracks: {
-              connect: {
-                id: trackId,
-              },
-            },
-          },
-        });
+            trackId
+          }
+        })
         return `Track with id: ${trackId} added to favorites`;
       }
     } catch {
@@ -178,18 +159,11 @@ export class FavoriteService {
       throw new NotFoundException('Track is not in favorites');
     }
 
-    await this.prismaService.favorite.update({
+    await this.prismaService.favoriteTrack.delete({
       where: {
-        id: favorite.id,
-      },
-      data: {
-        tracks: {
-          disconnect: {
-            id: trackId,
-          },
-        },
-      },
-    });
+        trackId
+      }
+    })
   }
 
   @OnEvent('track.deleted')
