@@ -17,7 +17,7 @@ git checkout feature-week-2
 ## Installing NPM modules
 
 ```
-npm install --force
+npm install
 ```
 Rename file `.env.example` to `.env`
 
@@ -26,13 +26,16 @@ Rename file `.env.example` to `.env`
 ```
 docker-compose up --build
 ```
-```
-docker exec -it nodejs2024q3_app_container npx prisma migrate dev --name init
-```
 
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing **http://localhost:4000/doc/**
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
+## Stopping application
+
+```
+docker-compose down
+```
 
 ## Testing
 
@@ -70,6 +73,12 @@ npm run lint
 
 ```
 npm run format
+```
+
+## Scanning
+
+```
+npm run scan
 ```
 
 ### Debugging in VSCode
