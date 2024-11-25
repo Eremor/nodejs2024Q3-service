@@ -7,11 +7,12 @@ import { TrackModule } from './track/track.module';
 import { FavoriteModule } from './favorite/favorite.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { LoggerModule } from './logger/logger.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
+import { HttpExceptionFilter } from './filter/http-exception.filter';
 
 @Module({
   imports: [
@@ -32,6 +33,10 @@ import { LoggerMiddleware } from './logger/logger.middleware';
     LoggerModule
   ],
   providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter
+    },
     {
       provide: APP_GUARD,
       useClass: AuthGuard
