@@ -29,6 +29,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - app_logs:/app/logs
     networks:
       - nodejs2024q3_network
     ports:
@@ -42,3 +43,4 @@ services:
 volumes:
   db_data:
   db_logs:
+  app_logs:
