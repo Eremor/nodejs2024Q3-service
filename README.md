@@ -87,6 +87,18 @@ To check file size rotation, change the `LOG_FILE_MAX_SIZE` variable in the `.en
 
 To change the logging level, change the `LOG_LEVEL` parameter in the `.env` file to one of the following: `'error', 'warn', 'log', 'debug', 'verbose'`
 
+To check uncaughtException, add the following line to some method:
+
+```
+throw new Error('Test uncaughtException')
+```
+
+To check unhandledRejection, add the following line to some method:
+
+```
+Promise.reject(new Error('Test unhandledRejection'))
+```
+
 ## Scanning
 
 ```
