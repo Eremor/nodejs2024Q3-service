@@ -42,7 +42,7 @@ export class UserController {
     status: 400,
     description: 'Bad request. body does not contain required fields',
   })
-  create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 
@@ -56,7 +56,7 @@ export class UserController {
     description: 'Successful operation',
     type: [User],
   })
-  findAll() {
+  async findAll() {
     return this.userService.getAllUsers();
   }
 
@@ -78,7 +78,7 @@ export class UserController {
     status: 404,
     description: 'User not found',
   })
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.userService.getUserById(id);
   }
 
@@ -113,7 +113,10 @@ export class UserController {
     status: 404,
     description: 'User not found',
   })
-  update(@Param('id') id: string, @Body() updateUserDto: UpdatePasswordDTO) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdatePasswordDTO,
+  ) {
     return this.userService.updateUserPassword(id, updateUserDto);
   }
 
@@ -135,7 +138,7 @@ export class UserController {
     status: 404,
     description: 'User not found',
   })
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.userService.deleteUser(id);
   }
 }

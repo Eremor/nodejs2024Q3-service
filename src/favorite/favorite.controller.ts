@@ -17,7 +17,7 @@ export class FavoriteController {
     description: 'Successful operation',
     type: Favorites,
   })
-  getFavorites() {
+  async getFavorites() {
     return this.favoriteService.getAll();
   }
 
@@ -38,7 +38,7 @@ export class FavoriteController {
     status: 422,
     description: `Artist with id doesn't exist.`,
   })
-  addArtistToFavorites(@Param('id') id: string) {
+  async addArtistToFavorites(@Param('id') id: string) {
     return this.favoriteService.addArtistToFavorites(id);
   }
 
@@ -60,7 +60,7 @@ export class FavoriteController {
     status: 404,
     description: 'Artist not found',
   })
-  removeArtistFromFavorites(@Param('id') id: string) {
+  async removeArtistFromFavorites(@Param('id') id: string) {
     return this.favoriteService.removeArtistFromFavorites(id);
   }
 
@@ -81,7 +81,7 @@ export class FavoriteController {
     status: 422,
     description: `Album with id doesn't exist.`,
   })
-  addAlbumToFavorites(@Param('id') id: string) {
+  async addAlbumToFavorites(@Param('id') id: string) {
     return this.favoriteService.addAlbumToFavorites(id);
   }
 
@@ -103,7 +103,7 @@ export class FavoriteController {
     status: 404,
     description: 'Album not found',
   })
-  removeAlbumFromFavorites(@Param('id') id: string) {
+  async removeAlbumFromFavorites(@Param('id') id: string) {
     return this.favoriteService.removeAlbumFromFavorites(id);
   }
 
@@ -124,7 +124,7 @@ export class FavoriteController {
     status: 422,
     description: `Track with id doesn't exist.`,
   })
-  addTrackToFavorites(@Param('id') id: string) {
+  async addTrackToFavorites(@Param('id') id: string) {
     return this.favoriteService.addTrackToFavorites(id);
   }
 
@@ -146,7 +146,7 @@ export class FavoriteController {
     status: 404,
     description: 'Track not found',
   })
-  removeTrackFromFavorites(@Param('id') id: string) {
+  async removeTrackFromFavorites(@Param('id') id: string) {
     return this.favoriteService.removeTrackFromFavorites(id);
   }
 }

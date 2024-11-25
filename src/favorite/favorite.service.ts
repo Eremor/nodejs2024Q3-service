@@ -12,32 +12,55 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { ArtistDeletedEvent } from 'src/artist/events/artist-deleted.event';
 import { AlbumDeletedEvent } from 'src/album/events/album-deleted.event';
 import { TrackDeletedEvent } from 'src/track/events/track-deleted.event';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class FavoriteService {
-  private favorites: Favorite = {
-    artists: [],
-    albums: [],
-    tracks: [],
-  };
-
   constructor(
+    private readonly prismaService: PrismaService,
     private readonly artistService: ArtistService,
     private readonly albumService: AlbumService,
     private readonly trackService: TrackService,
   ) {}
 
-  getAll(): Favorite {
-    return this.favorites;
+  async getAll(): Promise<Favorite> {
+    const tracks = await this.prismaService.favoriteTrack.findMany({
+      include: {
+        track: true
+      }
+    })
+
+    const albums = await this.prismaService.favoriteAlbum.findMany({
+      include: {
+        album: true
+      }
+    })
+
+    const artists = await this.prismaService.favoriteArtist.findMany({
+      include: {
+        artist: true
+      }
+    })
+
+    return {
+      tracks: tracks.map((favTrack) => favTrack.track),
+      albums: albums.map((favAlbum) => favAlbum.album),
+      artists: artists.map((favArtist) => favArtist.artist)
+    }
   }
 
-  addArtistToFavorites(artistId: string): string | void {
+  async addArtistToFavorites(artistId: string): Promise<string | void> {
     validateId(artistId);
     try {
-      const artist = this.artistService.getArtistById(artistId);
+      const artist = await this.artistService.getArtistById(artistId);
+      const favorite = await this.getAll();
 
-      if (!this.favorites.artists.includes(artist)) {
-        this.favorites.artists.push(artist);
+      if (!favorite.artists.includes(artist)) {
+        await this.prismaService.favoriteArtist.create({
+          data: {
+            artistId
+          }
+        })
         return `Artist with id: ${artistId} added to favorites`;
       }
     } catch {
@@ -45,33 +68,41 @@ export class FavoriteService {
     }
   }
 
-  removeArtistFromFavorites(artistId: string) {
+  async removeArtistFromFavorites(artistId: string): Promise<void> {
     validateId(artistId);
-    const index = this.favorites.artists.findIndex(
+    const favorite = await this.getAll();
+    const artistExists = favorite.artists.some(
       (artist) => artist.id === artistId,
     );
 
-    if (index === -1) {
+    if (!artistExists) {
       throw new NotFoundException('Artist is not in favorites');
     }
 
-    this.favorites.artists.splice(index, 1);
+    await this.prismaService.favoriteArtist.delete({
+      where: {
+        artistId
+      }
+    })
   }
 
   @OnEvent('artist.deleted')
-  handleArtistDeleted(event: ArtistDeletedEvent) {
-    this.favorites.artists = this.favorites.artists.filter(
-      (artist) => artist.id !== event.artistId,
-    );
+  async handleArtistDeleted(event: ArtistDeletedEvent): Promise<void> {
+    await this.removeArtistFromFavorites(event.artistId);
   }
 
-  addAlbumToFavorites(albumId: string): string | void {
+  async addAlbumToFavorites(albumId: string): Promise<string | void> {
     validateId(albumId);
     try {
-      const album = this.albumService.getOneById(albumId);
+      const album = await this.albumService.getOneById(albumId);
+      const favorite = await this.getAll();
 
-      if (!this.favorites.albums.includes(album)) {
-        this.favorites.albums.push(album);
+      if (!favorite.albums.includes(album)) {
+        await this.prismaService.favoriteAlbum.create({
+          data: {
+            albumId
+          }
+        })
         return `Album with id: ${albumId} added to favorites`;
       }
     } catch {
@@ -79,33 +110,39 @@ export class FavoriteService {
     }
   }
 
-  removeAlbumFromFavorites(albumId: string) {
+  async removeAlbumFromFavorites(albumId: string): Promise<void> {
     validateId(albumId);
-    const index = this.favorites.albums.findIndex(
-      (album) => album.id === albumId,
-    );
+    const favorite = await this.getAll();
+    const albumExists = favorite.albums.some((album) => album.id === albumId);
 
-    if (index === -1) {
+    if (!albumExists) {
       throw new NotFoundException('Album is not in favorites');
     }
 
-    this.favorites.albums.splice(index, 1);
+    await this.prismaService.favoriteAlbum.delete({
+      where: {
+        albumId
+      }
+    })
   }
 
   @OnEvent('album.deleted')
-  handleAlbumDeleted(event: AlbumDeletedEvent) {
-    this.favorites.albums = this.favorites.albums.filter(
-      (album) => album.id !== event.albumId,
-    );
+  async handleAlbumDeleted(event: AlbumDeletedEvent): Promise<void> {
+    await this.removeAlbumFromFavorites(event.albumId);
   }
 
-  addTrackToFavorites(trackId: string): string | void {
+  async addTrackToFavorites(trackId: string): Promise<string | void> {
     validateId(trackId);
     try {
-      const track = this.trackService.getOneById(trackId);
+      const track = await this.trackService.getOneById(trackId);
+      const favorite = await this.getAll();
 
-      if (!this.favorites.tracks.includes(track)) {
-        this.favorites.tracks.push(track);
+      if (!favorite.tracks.includes(track)) {
+        await this.prismaService.favoriteTrack.create({
+          data: {
+            trackId
+          }
+        })
         return `Track with id: ${trackId} added to favorites`;
       }
     } catch {
@@ -113,23 +150,24 @@ export class FavoriteService {
     }
   }
 
-  removeTrackFromFavorites(trackId: string) {
+  async removeTrackFromFavorites(trackId: string): Promise<void> {
     validateId(trackId);
-    const index = this.favorites.tracks.findIndex(
-      (track) => track.id === trackId,
-    );
+    const favorite = await this.getAll();
+    const trackExists = favorite.tracks.some((track) => track.id === trackId);
 
-    if (index === -1) {
+    if (!trackExists) {
       throw new NotFoundException('Track is not in favorites');
     }
 
-    this.favorites.tracks.splice(index, 1);
+    await this.prismaService.favoriteTrack.delete({
+      where: {
+        trackId
+      }
+    })
   }
 
   @OnEvent('track.deleted')
-  handleTrackDeleted(event: TrackDeletedEvent) {
-    this.favorites.tracks = this.favorites.tracks.filter(
-      (track) => track.id !== event.trackId,
-    );
+  async handleTrackDeleted(event: TrackDeletedEvent): Promise<void> {
+    await this.removeTrackFromFavorites(event.trackId);
   }
 }

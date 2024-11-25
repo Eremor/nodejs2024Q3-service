@@ -46,7 +46,7 @@ export class ArtistController {
     status: 400,
     description: 'Bad request. body does not contain required fields',
   })
-  create(@Body() createArtistDto: CreateArtistDto) {
+  async create(@Body() createArtistDto: CreateArtistDto) {
     return this.artistService.createArtist(createArtistDto);
   }
 
@@ -60,7 +60,7 @@ export class ArtistController {
     description: 'Successful operation',
     type: [Artist],
   })
-  findAll() {
+  async findAll() {
     return this.artistService.getAllArtists();
   }
 
@@ -82,7 +82,7 @@ export class ArtistController {
     status: 404,
     description: 'Artist not found',
   })
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.artistService.getArtistById(id);
   }
 
@@ -95,11 +95,6 @@ export class ArtistController {
     status: 200,
     description: 'Successful operation',
     type: Artist,
-    example: {
-      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      name: 'Freddie Mercury',
-      grammy: true,
-    },
   })
   @ApiBody({
     schema: {
@@ -124,7 +119,10 @@ export class ArtistController {
     status: 404,
     description: 'Artist not found',
   })
-  update(@Param('id') id: string, @Body() updateArtistDto: CreateArtistDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateArtistDto: CreateArtistDto,
+  ) {
     return this.artistService.updateArtist(id, updateArtistDto);
   }
 
@@ -146,7 +144,7 @@ export class ArtistController {
     status: 404,
     description: 'Artist not found',
   })
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.artistService.deleteArtist(id);
   }
 }

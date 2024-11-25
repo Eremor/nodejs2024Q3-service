@@ -1,0 +1,44 @@
+networks:
+  nodejs2024q3_network:
+    driver: bridge
+
+services:
+  database:
+    container_name: hl_db
+    image: eremor/hl_db
+    build:
+      dockerfile: Dockerfile.db
+      context: .
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - db_logs:/var/log/postgresql
+    networks:
+      - nodejs2024q3_network
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    restart: always
+
+  app:
+    container_name: hl_app
+    image: eremor/hl_app
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - nodejs2024q3_network
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - database
+    env_file:
+      - .env
+    restart: always
+
+volumes:
+  db_data:
+  db_logs:

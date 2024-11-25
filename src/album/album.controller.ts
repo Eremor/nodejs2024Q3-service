@@ -50,7 +50,7 @@ export class AlbumController {
     status: 400,
     description: 'Bad request. body does not contain required fields',
   })
-  create(@Body() createAlbumDto: CreateAlbumDto) {
+  async create(@Body() createAlbumDto: CreateAlbumDto) {
     return this.albumService.create(createAlbumDto);
   }
 
@@ -64,7 +64,7 @@ export class AlbumController {
     description: 'Successful operation',
     type: [Album],
   })
-  findAll() {
+  async findAll() {
     return this.albumService.getAll();
   }
 
@@ -86,7 +86,7 @@ export class AlbumController {
     status: 404,
     description: 'Album not found',
   })
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.albumService.getOneById(id);
   }
 
@@ -99,12 +99,6 @@ export class AlbumController {
     status: 200,
     description: 'The album has been updated.',
     type: Album,
-    example: {
-      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      name: 'A Night at the Opera',
-      year: 1975,
-      artistId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    },
   })
   @ApiBody({
     schema: {
@@ -133,7 +127,10 @@ export class AlbumController {
     status: 404,
     description: 'Album not found',
   })
-  update(@Param('id') id: string, @Body() updateAlbumDto: CreateAlbumDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateAlbumDto: CreateAlbumDto,
+  ) {
     return this.albumService.update(id, updateAlbumDto);
   }
 
@@ -155,7 +152,7 @@ export class AlbumController {
     status: 404,
     description: 'Album not found',
   })
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.albumService.remove(id);
   }
 }
