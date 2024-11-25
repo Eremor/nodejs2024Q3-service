@@ -1,13 +1,15 @@
 import { Controller, Delete, Get, HttpCode, Param, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FavoriteService } from './favorite.service';
 import { Favorites } from './entities/favorite.entity';
 
+@ApiTags('Favorites')
 @Controller('favs')
 export class FavoriteController {
   constructor(private readonly favoriteService: FavoriteService) {}
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get all favorites',
     description: 'Get all favorites movies, tracks and books',
@@ -22,6 +24,7 @@ export class FavoriteController {
   }
 
   @Post('artist/:id')
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Add artist to the favorites',
     description: 'Add artist to the favorites',
@@ -44,6 +47,7 @@ export class FavoriteController {
 
   @Delete('artist/:id')
   @HttpCode(204)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Delete artist from favorites',
     description: 'Delete artist from favorites',
@@ -65,6 +69,7 @@ export class FavoriteController {
   }
 
   @Post('album/:id')
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Add album to the favorites',
     description: 'Add album to the favorites',
@@ -87,6 +92,7 @@ export class FavoriteController {
 
   @Delete('album/:id')
   @HttpCode(204)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Delete album from favorites',
     description: 'Delete album from favorites',
@@ -108,6 +114,7 @@ export class FavoriteController {
   }
 
   @Post('track/:id')
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Add track to the favorites',
     description: 'Add track to the favorites',
@@ -130,6 +137,7 @@ export class FavoriteController {
 
   @Delete('track/:id')
   @HttpCode(204)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Delete track from favorites',
     description: 'Delete track from favorites',

@@ -8,7 +8,7 @@ import {
   Put,
   HttpCode,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDTO } from './dto/update-password.dto';
@@ -20,6 +20,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Create user',
     description: 'Create a new user',
@@ -47,6 +48,7 @@ export class UserController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get all users',
     description: 'Get all users',
@@ -61,6 +63,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get user by id',
     description: 'Get single user by id',
@@ -83,6 +86,7 @@ export class UserController {
   }
 
   @Put(':id')
+  @ApiBearerAuth()
   @ApiOperation({
     summary: `Update a user's password`,
     description: `Update a user's password by ID`,
@@ -122,6 +126,7 @@ export class UserController {
 
   @Delete(':id')
   @HttpCode(204)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Delete user',
     description: 'Delete user by ID.',

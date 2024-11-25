@@ -8,16 +8,18 @@ import {
   HttpCode,
   Put,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { Track } from './entities/track.entity';
 
+@ApiTags('Track')
 @Controller('track')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Add new track',
     description: 'Add new track information',
@@ -59,6 +61,7 @@ export class TrackController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get all tracks',
     description: 'Get all library tracks list',
@@ -73,6 +76,7 @@ export class TrackController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get track by id',
     description: 'Get single track by id',
@@ -95,6 +99,7 @@ export class TrackController {
   }
 
   @Put(':id')
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Update track',
     description: 'Update library track information by ID',
@@ -144,6 +149,7 @@ export class TrackController {
 
   @Delete(':id')
   @HttpCode(204)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Delete track',
     description: 'Delete track by ID.',
