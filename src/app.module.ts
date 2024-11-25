@@ -7,6 +7,9 @@ import { TrackModule } from './track/track.module';
 import { FavoriteModule } from './favorite/favorite.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/guards/auth.guard';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -18,6 +21,18 @@ import { AuthModule } from './auth/auth.module';
     FavoriteModule,
     PrismaModule,
     AuthModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET_KEY,
+      signOptions: {
+        expiresIn: process.env.TOKEN_EXPIRE_TIME
+      }
+    })
   ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard
+    }
+  ]
 })
 export class AppModule {}

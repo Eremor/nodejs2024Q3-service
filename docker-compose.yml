@@ -22,7 +22,7 @@ services:
 
   app:
     container_name: hl_app
-    image: eremor/hl_app
+    # image: eremor/hl_app
     build:
       dockerfile: Dockerfile
       context: .

@@ -6,7 +6,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDTO } from './dto/update-password.dto';
 import { UserWithoutPassword } from './interfaces/user.interface';
-import { validateId } from '../utils';
+import { comparePassword, hashPassword, validateId } from '../utils';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -41,8 +41,12 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<UserWithoutPassword> {
+    const hashedPassword = await hashPassword(createUserDto.password)
     const newUser = await this.prismaService.user.create({
-      data: createUserDto,
+      data: {
+        login: createUserDto.login,
+        password: hashedPassword
+      },
     });
 
     const { password, ...userWithoutPassword } = newUser;
@@ -68,14 +72,18 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    if (user.password !== oldPassword) {
+    const isMatchPassword = await comparePassword(oldPassword, user.password)
+
+    if (!isMatchPassword) {
       throw new ForbiddenException('Old password is wrong');
     }
+
+    const hashedNewPassword = await hashPassword(newPassword)
 
     const updatedUser = await this.prismaService.user.update({
       where: { id },
       data: {
-        password: newPassword,
+        password: hashedNewPassword,
         version: user.version + 1,
       },
     });
