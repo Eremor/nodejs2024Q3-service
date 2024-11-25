@@ -49,6 +49,10 @@ export class UserController {
     status: 400,
     description: 'Bad request. body does not contain required fields',
   })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
+  })
   async create(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
@@ -63,6 +67,10 @@ export class UserController {
     status: 200,
     description: 'Successful operation',
     type: [User],
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   async findAll() {
     return this.userService.getAllUsers();
@@ -82,6 +90,10 @@ export class UserController {
   @ApiResponse({
     status: 400,
     description: 'Bad request. userId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   @ApiResponse({
     status: 404,
@@ -116,6 +128,10 @@ export class UserController {
     description: 'Bad request. userId is invalid (not uuid)',
   })
   @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
+  })
+  @ApiResponse({
     status: 403,
     description: 'oldPassword is wrong',
   })
@@ -144,6 +160,10 @@ export class UserController {
   @ApiResponse({
     status: 400,
     description: 'Bad request. userId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   @ApiResponse({
     status: 404,

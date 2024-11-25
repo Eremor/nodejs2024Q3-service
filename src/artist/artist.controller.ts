@@ -54,6 +54,10 @@ export class ArtistController {
     status: 400,
     description: 'Bad request. body does not contain required fields',
   })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
+  })
   async create(@Body() createArtistDto: CreateArtistDto) {
     return this.artistService.createArtist(createArtistDto);
   }
@@ -68,6 +72,10 @@ export class ArtistController {
     status: 200,
     description: 'Successful operation',
     type: [Artist],
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   async findAll() {
     return this.artistService.getAllArtists();
@@ -87,6 +95,10 @@ export class ArtistController {
   @ApiResponse({
     status: 400,
     description: 'Bad request. artistId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   @ApiResponse({
     status: 404,
@@ -127,6 +139,10 @@ export class ArtistController {
     description: 'Bad request. artistId is invalid (not uuid)',
   })
   @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
+  })
+  @ApiResponse({
     status: 404,
     description: 'Artist not found',
   })
@@ -151,6 +167,10 @@ export class ArtistController {
   @ApiResponse({
     status: 400,
     description: 'Bad request. artistId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   @ApiResponse({
     status: 404,

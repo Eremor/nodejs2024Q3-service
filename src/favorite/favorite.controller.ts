@@ -24,6 +24,10 @@ export class FavoriteController {
     description: 'Successful operation',
     type: Favorites,
   })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
+  })
   async getFavorites() {
     return this.favoriteService.getAll();
   }
@@ -41,6 +45,10 @@ export class FavoriteController {
   @ApiResponse({
     status: 400,
     description: 'Bad request. artistId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   @ApiResponse({
     status: 422,
@@ -66,6 +74,10 @@ export class FavoriteController {
     description: 'Bad request. artistId is invalid (not uuid)',
   })
   @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
+  })
+  @ApiResponse({
     status: 404,
     description: 'Artist not found',
   })
@@ -86,6 +98,10 @@ export class FavoriteController {
   @ApiResponse({
     status: 400,
     description: 'Bad request. albumId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   @ApiResponse({
     status: 422,
@@ -111,6 +127,10 @@ export class FavoriteController {
     description: 'Bad request. albumId is invalid (not uuid)',
   })
   @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
+  })
+  @ApiResponse({
     status: 404,
     description: 'Album not found',
   })
@@ -131,6 +151,10 @@ export class FavoriteController {
   @ApiResponse({
     status: 400,
     description: 'Bad request. trackId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   @ApiResponse({
     status: 422,
@@ -154,6 +178,10 @@ export class FavoriteController {
   @ApiResponse({
     status: 400,
     description: 'Bad request. trackId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   @ApiResponse({
     status: 404,

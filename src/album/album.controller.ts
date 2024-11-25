@@ -58,6 +58,10 @@ export class AlbumController {
     status: 400,
     description: 'Bad request. body does not contain required fields',
   })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
+  })
   async create(@Body() createAlbumDto: CreateAlbumDto) {
     return this.albumService.create(createAlbumDto);
   }
@@ -72,6 +76,10 @@ export class AlbumController {
     status: 200,
     description: 'Successful operation',
     type: [Album],
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   async findAll() {
     return this.albumService.getAll();
@@ -91,6 +99,10 @@ export class AlbumController {
   @ApiResponse({
     status: 400,
     description: 'Bad request. albumId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   @ApiResponse({
     status: 404,
@@ -135,6 +147,10 @@ export class AlbumController {
     description: 'Bad request. albumId is invalid (not uuid)',
   })
   @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
+  })
+  @ApiResponse({
     status: 404,
     description: 'Album not found',
   })
@@ -159,6 +175,10 @@ export class AlbumController {
   @ApiResponse({
     status: 400,
     description: 'Bad request. albumId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   @ApiResponse({
     status: 404,

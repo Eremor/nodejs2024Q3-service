@@ -62,6 +62,10 @@ export class TrackController {
     status: 400,
     description: 'Bad request. body does not contain required fields',
   })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
+  })
   async create(@Body() createTrackDto: CreateTrackDto) {
     return this.trackService.create(createTrackDto);
   }
@@ -76,6 +80,10 @@ export class TrackController {
     status: 200,
     description: 'Successful operation',
     type: [Track],
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   async findAll() {
     return this.trackService.getAll();
@@ -95,6 +103,10 @@ export class TrackController {
   @ApiResponse({
     status: 400,
     description: 'Bad request. trackId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   @ApiResponse({
     status: 404,
@@ -143,6 +155,10 @@ export class TrackController {
     description: 'Bad request. trackId is invalid (not uuid)',
   })
   @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
+  })
+  @ApiResponse({
     status: 404,
     description: 'Track not found',
   })
@@ -167,6 +183,10 @@ export class TrackController {
   @ApiResponse({
     status: 400,
     description: 'Bad request. trackId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Access token is missing or invalid'
   })
   @ApiResponse({
     status: 404,
