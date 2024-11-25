@@ -4,6 +4,7 @@
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+- Docker - [Download & Install Docker Desktop](https://www.docker.com/get-started/)
 
 ## Downloading
 
@@ -11,7 +12,7 @@
 git clone https://github.com/Eremor/nodejs2024Q3-service.git
 ```
 ```
-git checkout feature-week-2
+git checkout feature-week-3
 ```
 
 ## Installing NPM modules
@@ -74,6 +75,17 @@ npm run lint
 ```
 npm run format
 ```
+
+## Logging
+
+Logs are saved to files in Docker Desktop
+`
+  Volumes -> nodejs2024q3-service_app_logs
+`
+
+To check file size rotation, change the `LOG_FILE_MAX_SIZE` variable in the `.env` file to 1 and perform some manipulations with the application so that the logs are more than 1 KB of data
+
+To change the logging level, change the `LOG_LEVEL` parameter in the `.env` file to one of the following: `'error', 'warn', 'log', 'debug', 'verbose'`
 
 ## Scanning
 
