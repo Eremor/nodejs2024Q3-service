@@ -10,12 +10,12 @@ import { PrismaModule } from 'src/prisma/prisma.module';
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
       signOptions: {
-        expiresIn: process.env.TOKEN_EXPIRE_TIME || '1h'
-      }
+        expiresIn: process.env.TOKEN_EXPIRE_TIME || '1h',
+      },
     }),
-    PrismaModule
+    PrismaModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserService]
+  providers: [AuthService, UserService],
 })
 export class AuthModule {}

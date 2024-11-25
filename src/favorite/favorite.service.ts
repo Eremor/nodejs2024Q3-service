@@ -26,27 +26,27 @@ export class FavoriteService {
   async getAll(): Promise<Favorite> {
     const tracks = await this.prismaService.favoriteTrack.findMany({
       include: {
-        track: true
-      }
-    })
+        track: true,
+      },
+    });
 
     const albums = await this.prismaService.favoriteAlbum.findMany({
       include: {
-        album: true
-      }
-    })
+        album: true,
+      },
+    });
 
     const artists = await this.prismaService.favoriteArtist.findMany({
       include: {
-        artist: true
-      }
-    })
+        artist: true,
+      },
+    });
 
     return {
       tracks: tracks.map((favTrack) => favTrack.track),
       albums: albums.map((favAlbum) => favAlbum.album),
-      artists: artists.map((favArtist) => favArtist.artist)
-    }
+      artists: artists.map((favArtist) => favArtist.artist),
+    };
   }
 
   async addArtistToFavorites(artistId: string): Promise<string | void> {
@@ -58,9 +58,9 @@ export class FavoriteService {
       if (!favorite.artists.includes(artist)) {
         await this.prismaService.favoriteArtist.create({
           data: {
-            artistId
-          }
-        })
+            artistId,
+          },
+        });
         return `Artist with id: ${artistId} added to favorites`;
       }
     } catch {
@@ -81,9 +81,9 @@ export class FavoriteService {
 
     await this.prismaService.favoriteArtist.delete({
       where: {
-        artistId
-      }
-    })
+        artistId,
+      },
+    });
   }
 
   @OnEvent('artist.deleted')
@@ -100,9 +100,9 @@ export class FavoriteService {
       if (!favorite.albums.includes(album)) {
         await this.prismaService.favoriteAlbum.create({
           data: {
-            albumId
-          }
-        })
+            albumId,
+          },
+        });
         return `Album with id: ${albumId} added to favorites`;
       }
     } catch {
@@ -121,9 +121,9 @@ export class FavoriteService {
 
     await this.prismaService.favoriteAlbum.delete({
       where: {
-        albumId
-      }
-    })
+        albumId,
+      },
+    });
   }
 
   @OnEvent('album.deleted')
@@ -140,9 +140,9 @@ export class FavoriteService {
       if (!favorite.tracks.includes(track)) {
         await this.prismaService.favoriteTrack.create({
           data: {
-            trackId
-          }
-        })
+            trackId,
+          },
+        });
         return `Track with id: ${trackId} added to favorites`;
       }
     } catch {
@@ -161,9 +161,9 @@ export class FavoriteService {
 
     await this.prismaService.favoriteTrack.delete({
       where: {
-        trackId
-      }
-    })
+        trackId,
+      },
+    });
   }
 
   @OnEvent('track.deleted')

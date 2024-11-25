@@ -1,37 +1,50 @@
 import { ConsoleLogger, Injectable, LogLevel } from '@nestjs/common';
 import { resolve } from 'path';
-import { mkdir, appendFile, stat, rename } from 'fs/promises'
+import { mkdir, appendFile, stat, rename } from 'fs/promises';
 
 @Injectable()
 export class LoggerService extends ConsoleLogger {
   private logDir = process.env.LOG_DIR || '/app/logs';
   private logFile = resolve(this.logDir, 'app.log');
-  private maxFileSize = parseInt(process.env.LOG_FILE_MAX_SIZE || '1024', 10) * 1024;
-  private logLevel: LogLevel[]
+  private maxFileSize =
+    parseInt(process.env.LOG_FILE_MAX_SIZE || '1024', 10) * 1024;
+  private logFiles: Record<string, string> = {};
+  private logLevel: LogLevel[];
 
   constructor() {
     super();
 
     const configuredLevel = process.env.LOG_LEVEl || 'log';
-    this.logLevel = this.getLogLevels(configuredLevel)
+    this.logLevel = this.getLogLevels(configuredLevel);
     super.setLogLevels(this.logLevel);
 
-    this.initLogDirectory()
+    this.initLogDirectory();
 
     process.on('uncaughtException', (err) => {
-      this.error('Uncaught Exception', err.stack)
-    })
+      this.error('Uncaught Exception', err.stack);
+    });
 
     process.on('unhandledRejection', (reason) => {
-      this.error('Unhandled Rejection', reason instanceof Error ? reason.stack : String(reason))
-    })
+      this.error(
+        'Unhandled Rejection',
+        reason instanceof Error ? reason.stack : String(reason),
+      );
+    });
   }
 
   private async initLogDirectory(): Promise<void> {
     try {
-      await mkdir(this.logDir, { recursive: true })
+      await mkdir(this.logDir, { recursive: true });
+
+      this.logFiles = {
+        ERROR: resolve(this.logDir, 'error.log'),
+        WARN: resolve(this.logDir, 'warn.log'),
+        LOG: resolve(this.logDir, 'log.log'),
+        DEBUG: resolve(this.logDir, 'debug.log'),
+        VERBOSE: resolve(this.logDir, 'verbose.log'),
+      };
     } catch (error) {
-      super.error(`Failed to create log dir: ${(error as Error).message}`)
+      super.error(`Failed to create log dir: ${(error as Error).message}`);
     }
   }
 
@@ -52,60 +65,69 @@ export class LoggerService extends ConsoleLogger {
 
   log(message: string, context?: string): void {
     if (this.logLevel.includes('log')) {
-      this.writeLog('LOG', message, context)
+      this.writeLog('LOG', message, context);
     }
-    super.log(message, context)
+    super.log(message, context);
   }
 
   error(message: string, stack?: string, context?: string): void {
     if (this.logLevel.includes('error')) {
-      this.writeLog('ERROR', `${message} ${stack || ''}`, context)
+      this.writeLog('ERROR', `${message} ${stack || ''}`, context);
     }
-    super.error(message, stack, context)
+    super.error(message, stack, context);
   }
 
   warn(message: string, context?: string): void {
     if (this.logLevel.includes('warn')) {
-      this.writeLog('WARN', message, context)
+      this.writeLog('WARN', message, context);
     }
-    super.warn(message, context)
+    super.warn(message, context);
   }
 
   debug(message: string, context?: string): void {
     if (this.logLevel.includes('debug')) {
-      this.writeLog('DEBUG', message, context)
+      this.writeLog('DEBUG', message, context);
     }
-    super.debug(message, context)
+    super.debug(message, context);
   }
 
   verbose(message: string, context?: string): void {
     if (this.logLevel.includes('verbose')) {
-      this.writeLog('VERBOSE', message, context)
+      this.writeLog('VERBOSE', message, context);
     }
-    super.verbose(message, context)
+    super.verbose(message, context);
   }
 
-  private async writeLog(level: string, message: string, context?: string): Promise<void> {
+  private async writeLog(
+    level: string,
+    message: string,
+    context?: string,
+  ): Promise<void> {
     const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] [${level}] ${context ? `[${context}]` : ''}${message}\n`;
+    const logEntry = `[${timestamp}] [${level}] ${
+      context ? `[${context}]` : ''
+    }${message}\n`;
     try {
-      await appendFile(this.logFile, logEntry)
-      await this.rotateLogs()
+      const logFile = this.logFiles[level];
+      if (logFile) {
+        await appendFile(logFile, logEntry);
+        await this.rotateLogs(logFile);
+      }
     } catch (error) {
-      super.error(`Failed to write log: ${(error as Error).message}`)
+      super.error(`Failed to write log: ${(error as Error).message}`);
     }
   }
 
-  private async rotateLogs(): Promise<void> {
+  private async rotateLogs(filePath: string): Promise<void> {
     try {
-      const stats = await stat(this.logFile)
+      const stats = await stat(filePath);
       if (stats.size > this.maxFileSize) {
-        const rotatedLogFile = `${this.logFile}.${Date.now()}`;
-        await rename(this.logFile, rotatedLogFile)
+        const rotatedLogFile = `${filePath}.${Date.now()}`;
+        await rename(filePath, rotatedLogFile);
       }
     } catch (error) {
       if (error.code !== 'ENOENT') {
-        super.error(`Failed to rotate log: ${error.message}`)
+        super.error(`Failed to rotate log: ${error.message}`);
       }
     }
   }

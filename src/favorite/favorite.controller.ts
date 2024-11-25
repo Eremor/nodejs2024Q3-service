@@ -1,5 +1,10 @@
 import { Controller, Delete, Get, HttpCode, Param, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FavoriteService } from './favorite.service';
 import { Favorites } from './entities/favorite.entity';
 

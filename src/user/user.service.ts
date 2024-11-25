@@ -18,7 +18,7 @@ export class UserService {
     return users.map(({ password, ...user }) => ({
       ...user,
       createdAt: Number(user.createdAt.getTime()),
-      updatedAt: Number(user.updatedAt.getTime())
+      updatedAt: Number(user.updatedAt.getTime()),
     }));
   }
 
@@ -36,16 +36,16 @@ export class UserService {
     return {
       ...userWithoutPassword,
       createdAt: Number(userWithoutPassword.createdAt.getTime()),
-      updatedAt: Number(userWithoutPassword.updatedAt.getTime())
+      updatedAt: Number(userWithoutPassword.updatedAt.getTime()),
     };
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<UserWithoutPassword> {
-    const hashedPassword = await hashPassword(createUserDto.password)
+    const hashedPassword = await hashPassword(createUserDto.password);
     const newUser = await this.prismaService.user.create({
       data: {
         login: createUserDto.login,
-        password: hashedPassword
+        password: hashedPassword,
       },
     });
 
@@ -54,7 +54,7 @@ export class UserService {
     return {
       ...userWithoutPassword,
       createdAt: Number(userWithoutPassword.createdAt.getTime()),
-      updatedAt: Number(userWithoutPassword.updatedAt.getTime())
+      updatedAt: Number(userWithoutPassword.updatedAt.getTime()),
     };
   }
 
@@ -72,13 +72,13 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    const isMatchPassword = await comparePassword(oldPassword, user.password)
+    const isMatchPassword = await comparePassword(oldPassword, user.password);
 
     if (!isMatchPassword) {
       throw new ForbiddenException('Old password is wrong');
     }
 
-    const hashedNewPassword = await hashPassword(newPassword)
+    const hashedNewPassword = await hashPassword(newPassword);
 
     const updatedUser = await this.prismaService.user.update({
       where: { id },
@@ -93,7 +93,7 @@ export class UserService {
     return {
       ...userWithoutPassword,
       createdAt: Number(userWithoutPassword.createdAt.getTime()),
-      updatedAt: Number(userWithoutPassword.updatedAt.getTime())
+      updatedAt: Number(userWithoutPassword.updatedAt.getTime()),
     };
   }
 

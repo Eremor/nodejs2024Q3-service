@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
@@ -8,19 +13,14 @@ import { Request } from 'express';
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private readonly jwtService: JwtService
-  ){}
+    private readonly jwtService: JwtService,
+  ) {}
 
-  async canActivate(
-    context: ExecutionContext,
-  ): Promise<boolean> {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(
-      IS_PUBLIC_KEY,
-      [
-        context.getHandler(),
-        context.getClass()
-      ]
-    )
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
 
     if (isPublic) {
       return true;
@@ -30,22 +30,19 @@ export class AuthGuard implements CanActivate {
     const authHeader = request.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException('Invalid token')
+      throw new UnauthorizedException('Invalid token');
     }
 
-    const token = authHeader.split(' ')[1]
+    const token = authHeader.split(' ')[1];
 
     try {
-      const decoded = await this.jwtService.verifyAsync(
-        token,
-        {
-          secret: process.env.JWT_SECRET_KEY
-        }
-      )
+      const decoded = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET_KEY,
+      });
       request['user'] = decoded;
-      return true
+      return true;
     } catch {
-      throw new UnauthorizedException('Invalid token')
+      throw new UnauthorizedException('Invalid token');
     }
   }
 }

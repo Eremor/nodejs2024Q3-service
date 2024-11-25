@@ -27,24 +27,24 @@ import { HttpExceptionFilter } from './filter/http-exception.filter';
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
       signOptions: {
-        expiresIn: process.env.TOKEN_EXPIRE_TIME
-      }
+        expiresIn: process.env.TOKEN_EXPIRE_TIME,
+      },
     }),
-    LoggerModule
+    LoggerModule,
   ],
   providers: [
     {
       provide: APP_FILTER,
-      useClass: HttpExceptionFilter
+      useClass: HttpExceptionFilter,
     },
     {
       provide: APP_GUARD,
-      useClass: AuthGuard
-    }
-  ]
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*')
+    consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }

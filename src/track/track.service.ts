@@ -38,29 +38,28 @@ export class TrackService {
   }
 
   async update(id: string, updateTrackDto: CreateTrackDto): Promise<Track> {
-    const track = await this.getOneById(id)
+    const track = await this.getOneById(id);
 
     if (track) {
       const updatedTrack = await this.prismaService.track.update({
         where: { id },
         data: updateTrackDto,
       });
-  
+
       return updatedTrack;
     }
   }
 
   async remove(id: string) {
-    const track = await this.getOneById(id)
+    const track = await this.getOneById(id);
 
     if (track) {
       this.eventEmitter.emit('track.deleted', new TrackDeletedEvent(id));
-  
+
       await this.prismaService.track.delete({
         where: { id },
       });
     }
-
   }
 
   async nullifyAlbumReferences(albumId: string): Promise<void> {
